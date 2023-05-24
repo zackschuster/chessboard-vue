@@ -1,16 +1,21 @@
-import { FILES } from "./constants.js";
-import pieces from "./pieces.svg.js";
+import { FILES } from './constants.js';
+import pieces from './pieces.svg.js';
 
 export function isValidSquare(square: string): boolean {
 	return square.search(/^[a-h][1-8]$/) !== -1;
 }
 
-export function isValidPieceName(pieceName: string = ''): pieceName is keyof typeof pieces {
+export function isValidPieceName(
+	pieceName: string = '',
+): pieceName is keyof typeof pieces {
 	return Object.keys(pieces).includes(pieceName);
 }
 
 export function isValidPositionObject(pos: Map<string, string>) {
-	return [...pos.entries()].every(([square, pieceName]) => isValidSquare(square) && isValidPieceName(pieceName));
+	return [...pos.entries()].every(
+		([square, pieceName]) =>
+			isValidSquare(square) && isValidPieceName(pieceName),
+	);
 }
 
 export function isValidFen(fen: string): boolean {
@@ -27,8 +32,7 @@ export function isValidFen(fen: string): boolean {
 
 	// check each section
 	for (let i = 0; i < 8; i++) {
-		if (chunks[i].length !== 8 ||
-			chunks[i].search(/[^kqrnbpKQRNBP1]/) !== -1) {
+		if (chunks[i].length !== 8 || chunks[i].search(/[^kqrnbpKQRNBP1]/) !== -1) {
 			return false;
 		}
 	}
@@ -68,8 +72,8 @@ export function fenToPosition(fen: string): Map<string, string> {
 				position.set(
 					square,
 					piece.toLowerCase() === piece
-						? `b${piece.toUpperCase()}`  // black
-						: `w${piece.toUpperCase()}` // white
+						? `b${piece.toUpperCase()}` // black
+						: `w${piece.toUpperCase()}`, // white
 				);
 				colIdx = colIdx + 1;
 			}
@@ -97,9 +101,10 @@ export function positionToFen(obj: Map<string, string>): string {
 			// piece exists
 			if (obj.has(square)) {
 				const [color, pieceKey] = obj.get(square)?.split('') ?? '';
-				fen += color === 'w'
-					? pieceKey.toUpperCase()  // white
-					: pieceKey.toLowerCase(); // black
+				fen +=
+					color === 'w'
+						? pieceKey.toUpperCase() // white
+						: pieceKey.toLowerCase(); // black
 			} else {
 				fen += '1'; // empty space
 			}
@@ -119,7 +124,8 @@ export function positionToFen(obj: Map<string, string>): string {
 }
 
 export function squeezeFenEmptySquares(fen: string): string {
-	return fen.replace(/11111111/g, '8')
+	return fen
+		.replace(/11111111/g, '8')
 		.replace(/1111111/g, '7')
 		.replace(/111111/g, '6')
 		.replace(/11111/g, '5')
@@ -129,7 +135,8 @@ export function squeezeFenEmptySquares(fen: string): string {
 }
 
 export function expandFenEmptySquares(fen: string): string {
-	return fen.replace(/8/g, '11111111')
+	return fen
+		.replace(/8/g, '11111111')
 		.replace(/7/g, '1111111')
 		.replace(/6/g, '111111')
 		.replace(/5/g, '11111')

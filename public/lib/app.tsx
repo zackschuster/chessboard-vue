@@ -1,18 +1,18 @@
-import { defineComponent, h } from "vue";
-import { Chessboard } from "./board.js";
-import { START_FEN } from "./constants.js";
-import { Piece } from "./piece.js";
-import { fenToPosition } from "./util.js";
+import { defineComponent, h } from 'vue';
+import { Chessboard } from './board.js';
+import { START_FEN } from './constants.js';
+import { Piece } from './piece.js';
+import { fenToPosition } from './util.js';
 
 export const App = defineComponent({
 	components: {
-		Chessboard
+		Chessboard,
 	},
 	data(): {
-		fenInput: string,
-		squaresClicked: string[],
-		whitePieces: Map<string, JSX.Element>,
-		blackPieces: Map<string, JSX.Element>,
+		fenInput: string;
+		squaresClicked: string[];
+		whitePieces: Map<string, JSX.Element>;
+		blackPieces: Map<string, JSX.Element>;
 	} {
 		return {
 			fenInput: '',
@@ -43,10 +43,12 @@ export const App = defineComponent({
 			<div class="container my-3">
 				<div class="row justify-content-center">
 					<div class="col-lg-7 col-md-10 col-12">
-						<Chessboard ref="chessboard"
-							onSquareClicked={({ squareName }) => this.squaresClicked.push(squareName)}
+						<Chessboard
+							ref="chessboard"
+							onSquareClicked={({ squareName }) =>
+								this.squaresClicked.push(squareName)
+							}
 							onPositionChanged={({ fen }) => {
-								console.log({fen});
 								this.fenInput = fen;
 							}}
 						/>
@@ -56,20 +58,23 @@ export const App = defineComponent({
 							<button
 								class="btn btn-outline-dark"
 								type="button"
-								onClick={() => this.board.setOrientation('flip')}>
-									Flip Board
+								onClick={() => this.board.setOrientation('flip')}
+							>
+								Flip Board
 							</button>
 							<button
 								class="btn btn-outline-dark mt-1"
 								type="button"
-								onClick={() => this.board.clearHighlights()}>
-									Clear Highlights
+								onClick={() => this.board.clearHighlights()}
+							>
+								Clear Highlights
 							</button>
 							<button
 								class="btn btn-outline-dark mt-1"
 								type="button"
-								onClick={() => this.board.clearPieces()}>
-									Clear Pieces
+								onClick={() => this.board.clearPieces()}
+							>
+								Clear Pieces
 							</button>
 							<button
 								class="btn btn-outline-dark mt-1"
@@ -77,17 +82,20 @@ export const App = defineComponent({
 								onClick={() => {
 									this.fenInput = START_FEN;
 									this.board.setStartingPosition();
-								}}>
-									Set Starting Position
+								}}
+							>
+								Set Starting Position
 							</button>
 							<button
 								class="btn btn-outline-dark mt-1"
 								type="button"
 								onClick={() => {
-									this.fenInput = 'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R';
+									this.fenInput =
+										'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R';
 									this.board.setPosition(fenToPosition(this.fenInput));
-								}}>
-									Set Ruy Lopez Position
+								}}
+							>
+								Set Ruy Lopez Position
 							</button>
 							<div class="input-group mt-1">
 								<input
@@ -101,23 +109,26 @@ export const App = defineComponent({
 										}
 									}}
 									aria-label="Custom FEN Input"
-									aria-describedby="apply-fen-btn" />
+									aria-describedby="apply-fen-btn"
+								/>
 								<button
 									class="btn btn-outline-dark"
 									type="button"
 									id="apply-fen-btn"
 									onClick={() => {
 										this.board.setPosition(fenToPosition(this.fenInput));
-									}}>
-										Apply FEN
+									}}
+								>
+									Apply FEN
 								</button>
 							</div>
 							<button
 								class="btn btn-outline-dark mt-1"
 								type="button"
 								id="copy-fen-btn"
-								onClick={() => navigator.clipboard.writeText(this.board.fen)}>
-									Copy Current FEN
+								onClick={() => navigator.clipboard.writeText(this.board.fen)}
+							>
+								Copy Current FEN
 							</button>
 						</div>
 						<div class="card p-3 mt-3">
@@ -131,9 +142,12 @@ export const App = defineComponent({
 						</div>
 						<div class="card p-3 mt-3">
 							<details>
-								<summary>{this.squaresClicked.length} Squares Clicked <br /> (Click to toggle list view)</summary>
+								<summary>
+									{this.squaresClicked.length} Squares Clicked <br /> (Click to
+									toggle list view)
+								</summary>
 								<ol class="mt-2">
-									{...this.squaresClicked.map(x => <li>{x}</li>)}
+									{...this.squaresClicked.map((x) => <li>{x}</li>)}
 								</ol>
 							</details>
 						</div>
@@ -141,5 +155,5 @@ export const App = defineComponent({
 				</div>
 			</div>
 		);
-	}
-})
+	},
+});

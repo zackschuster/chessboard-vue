@@ -1,7 +1,12 @@
-import { defineComponent, h } from "vue";
-import { FILES, START_POSITION } from "./constants.js";
-import { Piece } from "./piece.js";
-import { fenToPosition, isValidFen, isValidPositionObject, positionToFen } from "./util.js";
+import { defineComponent, h } from 'vue';
+import { FILES, START_POSITION } from './constants.js';
+import { Piece } from './piece.js';
+import {
+	fenToPosition,
+	isValidFen,
+	isValidPositionObject,
+	positionToFen,
+} from './util.js';
 
 export const Chessboard = defineComponent({
 	expose: [
@@ -14,15 +19,15 @@ export const Chessboard = defineComponent({
 	],
 
 	data(): {
-		highlights: Set<string>,
-		orientation: 'white' | 'black',
-		position: Map<string, string>,
+		highlights: Set<string>;
+		orientation: 'white' | 'black';
+		position: Map<string, string>;
 	} {
 		return {
 			highlights: new Set(),
 			orientation: 'white',
 			position: new Map(),
-		}
+		};
 	},
 
 	emits: {
@@ -74,12 +79,14 @@ export const Chessboard = defineComponent({
 				} else if (isValidFen(position)) {
 					newPosition = fenToPosition(position);
 				} else {
-					newPosition= new Map();
+					newPosition = new Map();
 				}
 			} else if (isValidPositionObject(position)) {
 				newPosition = new Map(position);
 			} else {
-				throw new Error(`Invalid value passed to the position method: ${position}`);
+				throw new Error(
+					`Invalid value passed to the position method: ${position}`,
+				);
 			}
 
 			const { position: currentPosition } = this;
@@ -101,43 +108,53 @@ export const Chessboard = defineComponent({
 	render() {
 		const ranks = Array.from({ length: 8 }).map((_, i) => (
 			<div id={`rank-${i + 1}`} class="row g-0">
-				{...FILES.map(file => {
+				{...FILES.map((file) => {
 					const squareName = `${file}${i + 1}`;
 					let squareEl: HTMLElement;
-					return <div
-						id={`square-${squareName}`}
-						class={`col square ${this.highlights.has(squareName) ? 'highlight' : ''}`}
-						ref={(ref) => ref instanceof HTMLElement && (squareEl = ref)}
-						onClick={() => {
-							if (this.highlights.has(squareName)) {
-								this.highlights.delete(squareName);
-							} else {
-								this.highlights.add(squareName);
-							}
-							this.$emit('squareClicked', { squareName });
-						}}
-						onDragover={(e) => {
-							e.preventDefault();
-							squareEl.classList.add('highlight-drop');
-						}}
-						onDragleave={(e) => {
-							e.preventDefault();
-							squareEl.classList.remove('highlight-drop');
-						}}
-						onDrop={(e) => {
-							e.preventDefault();
-							if (e.dataTransfer != null) {
-								this.position.set(squareName, e.dataTransfer.getData("text/plain"));
-							}
-							squareEl.classList.remove('highlight-drop');
-						}}
-					>
-						{
-							this.position.has(squareName)
-								? <Piece name={this.position.get(squareName)} onDrag={() => this.position.delete(squareName)} />
-								: undefined
-						}
-					</div>;
+					return (
+						<div
+							id={`square-${squareName}`}
+							class={`col square ${
+								this.highlights.has(squareName) ? 'highlight' : ''
+							}`}
+							ref={(ref) => ref instanceof HTMLElement && (squareEl = ref)}
+							onClick={() => {
+								if (this.highlights.has(squareName)) {
+									this.highlights.delete(squareName);
+								} else {
+									this.highlights.add(squareName);
+								}
+								this.$emit('squareClicked', { squareName });
+							}}
+							onDragover={(e) => {
+								e.preventDefault();
+								squareEl.classList.add('highlight-drop');
+							}}
+							onDragleave={(e) => {
+								e.preventDefault();
+								squareEl.classList.remove('highlight-drop');
+							}}
+							onDrop={(e) => {
+								e.preventDefault();
+								if (e.dataTransfer != null) {
+									this.position.set(
+										squareName,
+										e.dataTransfer.getData('text/plain'),
+									);
+								}
+								squareEl.classList.remove('highlight-drop');
+							}}
+						>
+							{this.position.has(squareName) ? (
+								<Piece
+									name={this.position.get(squareName)}
+									onDrag={() => {
+										this.position.delete(squareName);
+									}}
+								/>
+							) : undefined}
+						</div>
+					);
 				})}
 			</div>
 		));
@@ -150,9 +167,11 @@ export const Chessboard = defineComponent({
 			<div id="board">
 				{ranks}
 				<div class="row g-0 ps-4 py-1">
-					{FILES.map(x => <div class="col text-center">{x}</div>)}
+					{FILES.map((x) => (
+						<div class="col text-center">{x}</div>
+					))}
 				</div>
 			</div>
 		);
-	}
+	},
 });

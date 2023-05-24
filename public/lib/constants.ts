@@ -1,4 +1,4 @@
-import { fenToPosition } from "./util.js";
+import { fenToPosition } from './util.js';
 
 export const FILES = 'abcdefgh'.split('');
 export const DEFAULT_DRAG_THROTTLE_RATE = 20;
@@ -11,7 +11,7 @@ export const enum AnimationSpeeds {
 	SNAPBACK = 60,
 	SNAP = 30,
 	TRASH = 100,
-};
+}
 
 // use unique class names to prevent clashing with anything else on the page
 // and simplify selectors
@@ -32,5 +32,5 @@ export const ClassNameLookup = {
 	sparePiecesBottom: 'spare-pieces-bottom-ae20f',
 	sparePiecesTop: 'spare-pieces-top-4028b',
 	square: 'square-55d63',
-	white: 'white-1e1d7'
+	white: 'white-1e1d7',
 } as const;
