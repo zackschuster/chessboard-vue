@@ -8,15 +8,37 @@ export const Piece = defineComponent({
 		onDrag: Function,
 	},
 
+	data() {
+		return {
+			uuid: crypto.randomUUID(),
+		};
+	},
+
+	computed: {
+		fullName() {
+			return (this.name ?? '')
+				.replace('P', 'Pawn')
+				.replace('N', 'Knight')
+				.replace('B', 'Bishop')
+				.replace('R', 'Rook')
+				.replace('Q', 'Queen')
+				.replace('K', 'King')
+				.replace('w', 'White ')
+				.replace('b', 'Black ');
+		},
+	},
+
 	render() {
 		return (
 			<img
+				key={this.uuid}
 				class="piece"
-				id={`piece-${this.name}`}
+				id={`piece-${this.name}-${this.uuid}`}
 				src={isValidPieceName(this.name) ? pieces[this.name] : this.name ?? ''}
+				data-piece-code={this.name}
+				data-piece={this.fullName}
 				draggable="true"
 				onDragstart={(e) => {
-					e.preventDefault();
 					if (e.dataTransfer != null) {
 						e.dataTransfer.setData('text/plain', this.name ?? '');
 					}
