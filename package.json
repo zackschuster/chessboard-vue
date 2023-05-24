@@ -1,0 +1,36 @@
+{
+	"name": "chessboard-vue",
+	"description": "A chessboard implementation using Vue.js",
+	"license": "GPLv3",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"start": "npm run build && run-p 'build:* -- --watch' serve",
+		"build": "run-p build:*",
+		"serve": "ws --open --no-conditional-get --static.maxage 0 --hostname localhost",
+		"prepack": "rm -rf package *.tgz && npm run build",
+		"postpack": "tar -xzf *.tgz && rm *.tgz",
+		"build:sass": "sass public/style.scss public/style.css",
+		"build:tsc": "tsc",
+		"clean:tsc": "tsc -b --clean"
+	},
+	"dependencies": {
+		"bootstrap": "5.2.3",
+		"vue": "3.3.2"
+	},
+	"devDependencies": {
+		"@babel/types": "7.21.5",
+		"local-web-server": "5.3.0",
+		"npm-run-all": "4.1.5",
+		"sass": "1.62.1",
+		"typescript": "5.0.4"
+	},
+	"files": [
+		"public/style.scss",
+		"public/index.html",
+		"public/index.ts",
+		"public/lib/*.tsx",
+		"public/lib/*.ts"
+	]
+}
