@@ -2,10 +2,22 @@ $primary: royalblue;
 
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 
+html,
+body {
+	height: 100%;
+}
+
 body {
 	&.dragging {
 		cursor: grabbing;
 	}
+	display: flex;
+	flex-direction: column;
+}
+
+main {
+	display: flex;
+	flex-grow: 1;
 }
 
 #board {
