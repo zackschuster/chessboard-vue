@@ -145,7 +145,7 @@ export const Chessboard = defineComponent({
 						>
 							{this.position.has(squareName) ? (
 								<Piece
-									name={this.position.get(squareName)}
+									code={this.position.get(squareName)}
 									onDrag={() => {
 										this.position.delete(squareName);
 									}}
