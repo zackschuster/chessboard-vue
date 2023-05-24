@@ -1,5 +1,5 @@
-import { defineComponent, h } from 'vue';
-import { FILES, START_POSITION } from './constants.js';
+import { Fragment, defineComponent, h } from 'vue';
+import { FILES, START_FEN, START_POSITION } from './constants.js';
 import { Piece } from './piece.js';
 import {
 	fenToPosition,
@@ -9,21 +9,14 @@ import {
 } from './util.js';
 
 export const Chessboard = defineComponent({
-	expose: [
-		'clearHighlights',
-		'clearPieces',
-		'setOrientation',
-		'setPosition',
-		'setStartingPosition',
-		'fen',
-	],
-
 	data(): {
+		fenInput: string;
 		highlights: Set<string>;
 		orientation: 'white' | 'black';
 		position: Map<string, string>;
 	} {
 		return {
+			fenInput: '',
 			highlights: new Set(),
 			orientation: 'white',
 			position: new Map(),
@@ -48,6 +41,7 @@ export const Chessboard = defineComponent({
 	watch: {
 		position: {
 			handler() {
+				this.fenInput = this.fen;
 				return this.$emit('positionChanged', { fen: this.fen });
 			},
 			deep: true,
@@ -103,6 +97,10 @@ export const Chessboard = defineComponent({
 			}
 			return this.orientation;
 		},
+	},
+
+	mounted() {
+		this.fenInput = this.fen;
 	},
 
 	render() {
@@ -164,14 +162,102 @@ export const Chessboard = defineComponent({
 		}
 
 		return (
-			<div id="board">
-				{ranks}
-				<div class="row g-0 ps-4 py-1">
-					{FILES.map((x) => (
-						<div class="col text-center">{x}</div>
-					))}
+			<>
+				<div id="board">
+					{ranks}
+					<div class="row g-0 ps-4 py-1">
+						{FILES.map((x) => (
+							<div class="col text-center">{x}</div>
+						))}
+					</div>
 				</div>
-			</div>
+				<div class="btn-toolbar justify-content-lg-between justify-content-center mt-2">
+					<div class="btn-group btn-group-sm mb-1" role="group">
+						<button
+							class="btn btn-outline-primary"
+							type="button"
+							onClick={() => this.setOrientation('flip')}
+							aria-label="Flip board"
+						>
+							Flip
+						</button>
+						<button
+							class="btn btn-outline-primary"
+							type="button"
+							onClick={() => this.clearPieces()}
+							aria-label="Clear board of pieces"
+						>
+							Clear
+						</button>
+						<button
+							class="btn btn-outline-primary"
+							type="button"
+							onClick={() => this.clearHighlights()}
+							aria-label="Clear board of highlights"
+						>
+							Unhighlight
+						</button>
+					</div>
+					<div class="input-group input-group-sm">
+						<input
+							type="text"
+							class="form-control"
+							placeholder="Insert FEN"
+							value={this.fenInput}
+							onChange={(e) => {
+								if (e.target instanceof HTMLInputElement) {
+									this.fenInput = e.target.value;
+								}
+							}}
+							aria-label="Custom FEN Input"
+							aria-describedby="apply-fen-btn"
+						/>
+						<button
+							class="btn btn-outline-success"
+							type="button"
+							id="apply-fen-btn"
+							onClick={() => {
+								this.setPosition(fenToPosition(this.fen));
+							}}
+						>
+							<span class="h5" innerHTML="&check;" />
+						</button>
+						<button
+							class="btn btn-outline-secondary"
+							type="button"
+							id="copy-fen-btn"
+							onClick={() => navigator.clipboard.writeText(this.fen)}
+						>
+							<span class="h4" innerHTML="&boxbox;" />
+						</button>
+					</div>
+				</div>
+				<div class="row g-0 my-2 justify-content-around" role="group">
+					<div class="btn-group btn-group-sm">
+						<button
+							class="btn btn-outline-dark"
+							type="button"
+							onClick={() => {
+								this.fenInput = START_FEN;
+								this.setStartingPosition();
+							}}
+						>
+							Start Position
+						</button>
+						<button
+							class="btn btn-outline-dark"
+							type="button"
+							onClick={() => {
+								this.fenInput =
+									'r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R';
+								this.setPosition(fenToPosition(this.fenInput));
+							}}
+						>
+							Ruy Lopez
+						</button>
+					</div>
+				</div>
+			</>
 		);
 	},
 });
