@@ -126,6 +126,9 @@ export const Chessboard = defineComponent({
 							}}
 							onDragover={(e) => {
 								e.preventDefault();
+								if (e.dataTransfer != null) {
+									e.dataTransfer.dropEffect = 'move';
+								}
 								squareEl.classList.add('highlight-drop');
 							}}
 							onDragleave={(e) => {

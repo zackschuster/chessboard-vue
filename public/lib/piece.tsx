@@ -41,6 +41,7 @@ export const Piece = defineComponent({
 				onDragstart={(e) => {
 					if (e.dataTransfer != null) {
 						e.dataTransfer.setData('text/plain', this.code ?? '');
+						e.dataTransfer.effectAllowed = 'move';
 					}
 					document.body.classList.add('dragging');
 					setTimeout(() => this.onDrag?.());
