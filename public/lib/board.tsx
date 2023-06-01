@@ -217,7 +217,7 @@ export const Chessboard = defineComponent({
 							type="button"
 							id="apply-fen-btn"
 							onClick={() => {
-								this.setPosition(fenToPosition(this.fen));
+								this.setPosition(fenToPosition(this.fenInput));
 							}}
 						>
 							<span class="h5" innerHTML="&check;" />
@@ -226,7 +226,7 @@ export const Chessboard = defineComponent({
 							class="btn btn-outline-secondary"
 							type="button"
 							id="copy-fen-btn"
-							onClick={() => navigator.clipboard.writeText(this.fen)}
+							onClick={() => navigator.clipboard.writeText(this.fenInput)}
 						>
 							<span class="h4" innerHTML="&boxbox;" />
 						</button>
