@@ -1,8 +1,8 @@
-npm install
-npm run build
 git fetch -av
 git checkout publish
 git rebase main
+npm install
+npm run build
 rm .gitignore
 touch .nojekyll
 git add .nojekyll
