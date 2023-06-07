@@ -28,7 +28,7 @@ export const Chessboard = defineComponent({
         position: {
             handler() {
                 this.fenInput = this.fen;
-                return this.$emit('positionChanged', { fen: this.fen });
+                return this.$emit('positionChanged', { fen: this.fenInput });
             },
             deep: true,
         },
@@ -98,6 +98,9 @@ export const Chessboard = defineComponent({
                     this.$emit('squareClicked', { squareName });
                 }, onDragover: (e) => {
                     e.preventDefault();
+                    if (e.dataTransfer != null) {
+                        e.dataTransfer.dropEffect = 'move';
+                    }
                     squareEl.classList.add('highlight-drop');
                 }, onDragleave: (e) => {
                     e.preventDefault();
@@ -108,7 +111,7 @@ export const Chessboard = defineComponent({
                         this.position.set(squareName, e.dataTransfer.getData('text/plain'));
                     }
                     squareEl.classList.remove('highlight-drop');
-                } }, this.position.has(squareName) ? (h(Piece, { name: this.position.get(squareName), onDrag: () => {
+                } }, this.position.has(squareName) ? (h(Piece, { code: this.position.get(squareName), onDrag: () => {
                     this.position.delete(squareName);
                 } })) : undefined));
         }))));
@@ -131,10 +134,10 @@ export const Chessboard = defineComponent({
                             }
                         }, "aria-label": "Custom FEN Input", "aria-describedby": "apply-fen-btn" }),
                     h("button", { class: "btn btn-outline-success", type: "button", id: "apply-fen-btn", onClick: () => {
-                            this.setPosition(fenToPosition(this.fen));
+                            this.setPosition(fenToPosition(this.fenInput));
                         } },
                         h("span", { class: "h5", innerHTML: "&check;" })),
-                    h("button", { class: "btn btn-outline-secondary", type: "button", id: "copy-fen-btn", onClick: () => navigator.clipboard.writeText(this.fen) },
+                    h("button", { class: "btn btn-outline-secondary", type: "button", id: "copy-fen-btn", onClick: () => navigator.clipboard.writeText(this.fenInput) },
                         h("span", { class: "h4", innerHTML: "&boxbox;" })))),
             h("div", { class: "row g-0 my-2 justify-content-around", role: "group" },
                 h("div", { class: "btn-group btn-group-sm" },

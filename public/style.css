@@ -10719,8 +10719,22 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
 body.dragging {
   cursor: grabbing;
+}
+
+main {
+  display: flex;
+  flex-grow: 1;
 }
 
 #board {

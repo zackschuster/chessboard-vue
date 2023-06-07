@@ -12,9 +12,9 @@ export const App = defineComponent({
     mounted() {
         for (const pieceKey of 'KQRNBP'.split('')) {
             const whitePieceName = `w${pieceKey}`;
-            const whitePiece = h(Piece, { name: whitePieceName });
+            const whitePiece = h(Piece, { code: whitePieceName });
             const blackPieceName = `b${pieceKey}`;
-            const blackPiece = h(Piece, { name: blackPieceName });
+            const blackPiece = h(Piece, { code: blackPieceName });
             this.whitePieces.set(whitePieceName, whitePiece);
             this.blackPieces.set(blackPieceName, blackPiece);
         }
