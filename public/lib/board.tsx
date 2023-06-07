@@ -42,7 +42,7 @@ export const Chessboard = defineComponent({
 		position: {
 			handler() {
 				this.fenInput = this.fen;
-				return this.$emit('positionChanged', { fen: this.fen });
+				return this.$emit('positionChanged', { fen: this.fenInput });
 			},
 			deep: true,
 		},
